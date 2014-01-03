@@ -6,7 +6,7 @@ MPEG TS packet filter
 Usage
 -----
 
-    tsfilt [[input] output]
+    tsfilt [input [output]]
 
   `input` : specifies a source TS file. if omitted, TS is read from stdin.
 
