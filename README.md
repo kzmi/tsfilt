@@ -9,6 +9,7 @@ Usage
     tsfilt [[input] output]
 
   `input` : specifies a source TS file. if omitted, TS is read from stdin.
+
   `output` : specifies a file to output filtered TS. if omitted, filtered TS is written to stdout.
 
 
@@ -30,7 +31,11 @@ All supplementary streams are dropped.
 Examples
 --------
 
+To convert a file:
+
     tsfilt xxxxxxxx.ts yyyyyyyy.ts
+
+To modify TS before convert it:
 
     tsfilt xxxxxxxx.ts | mencoder -ovc x264 -oac mp3lame -of avi -o xxxxxxxx.avi - 
 
