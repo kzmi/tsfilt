@@ -292,6 +292,6 @@ FINISH:
   if (fout && fout != stdout)
     fclose(fout);
 
-  return 0;
+  return result;
 }
 
