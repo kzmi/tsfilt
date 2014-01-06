@@ -36,7 +36,7 @@ constexpr int PID_PAT = 0;
 
 int g_pmtPid = -1;
 
-std::set<int> dropPidSet;
+std::set<int> g_dropPidSet;
 
 void printDebug(const char *format, ...) {
 /*
@@ -149,7 +149,7 @@ void feedPMT(bool startInd, int contCounter, const u_int8_t *payload, int payloa
   bool hasVideo = false;
   bool hasAudio = false;
 
-  dropPidSet.clear();
+  g_dropPidSet.clear();
 
   while (p < tail) {
     int streamType = p[0];
@@ -161,7 +161,7 @@ void feedPMT(bool startInd, int contCounter, const u_int8_t *payload, int payloa
     switch (streamType) {
       case 2: // ISO/IEC 13818-2
         if (hasVideo) {
-          dropPidSet.insert(pid);
+          g_dropPidSet.insert(pid);
         } else {
           hasVideo = true;
         }
@@ -169,14 +169,14 @@ void feedPMT(bool startInd, int contCounter, const u_int8_t *payload, int payloa
 
       case 0xf: // ISO/IEC 13818-7
         if (hasAudio) {
-          dropPidSet.insert(pid);
+          g_dropPidSet.insert(pid);
         } else {
           hasAudio = true;
         }
         break;
 
       default:
-        dropPidSet.insert(pid);
+        g_dropPidSet.insert(pid);
         break;
     }
   }
@@ -203,7 +203,7 @@ bool checkPacket(const u_int8_t *packet, int packetSize) {
     feedPAT(startInd, contCounter, &packet[payloadPos], packetSize - payloadPos);
   } else if (pid == g_pmtPid) {
     feedPMT(startInd, contCounter, &packet[payloadPos], packetSize - payloadPos);
-  } else if (dropPidSet.find(pid) != dropPidSet.end()) {
+  } else if (g_dropPidSet.find(pid) != g_dropPidSet.end()) {
     return true;
   }
 
