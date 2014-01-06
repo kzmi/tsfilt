@@ -2,9 +2,9 @@
 # tsfilt
 #
 
-CXX= clang
-CXXFLAGS= -O3 --std=c++11 -Wall
-LIBS= -lstdc++
+CXX= clang++
+CXXFLAGS= -O3 --std=c++11 -stdlib=libstdc++ -Wall
+LIBS=
 
 TARGET= tsfilt
 
