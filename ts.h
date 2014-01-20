@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-#include <iterator>
 #include <vector>
 
 #include "accessor.h"
