@@ -33,8 +33,7 @@
 
 #include "ts.h"
 
-int g_pmtPid = -1;
-
+std::set<int> g_pmtPidSet;
 std::set<int> g_dropPidSet;
 
 void printDebug(const char *format, ...) {
@@ -61,6 +60,8 @@ void feedPAT(const TS::Packet &packet) {
 
   printDebug("pasre PAT\n");
 
+  g_pmtPidSet.clear();
+
   TS::PATSection section = psi.firstSection();
   for (;;) {
     auto iterator = section.iterator();
@@ -71,7 +72,7 @@ void feedPAT(const TS::Packet &packet) {
       int pid = entry.pid();
       printDebug("PAT: prog:%d  pid:%d\n", programNumber, pid);
       if (programNumber != 0) {
-        g_pmtPid = pid;
+        g_pmtPidSet.insert(pid);
         break;
       }
     }
@@ -149,7 +150,7 @@ bool checkPacket(const TS::Packet &packet) {
 
   if (pid == TS::PID::PAT) {
     feedPAT(packet);
-  } else if (pid == g_pmtPid) {
+  } else if (g_pmtPidSet.find(pid) != g_pmtPidSet.end()) {
     feedPMT(packet);
   } else if (g_dropPidSet.find(pid) != g_dropPidSet.end()) {
     return true;
